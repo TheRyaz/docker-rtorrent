@@ -57,6 +57,33 @@ fi
 # remove session block
 rm -rf /root/.session/rtorrent.lock
 
+############
+# htpasswd #
+############
+
+# the goal here is to have basic authentication
+# using simple htpassword file. First we check if
+# the file exists and add the necessary directives to the httpd file
+if [ -f /config/password_file ]; then
+  # backup copy of lighttpd.file
+  if [ ! -f /etc/lighttpd/lighttpd.confg ]; then
+    cp /etc/lighttpd/lighttpd.confg /etc/lighttpd/lighttpd.confg.bak
+  fi
+
+  # enable the mod_auth module
+  sed -ie 's/#[ ]*"mod_auth/"mod_auth/g' /etc/lighttpd/lighttpd.conf
+
+  # set the password protection directives
+  sed -ie 's/# auth.backend[ ]/auth.backend /g' /etc/lighttpd/lighttpd.conf
+  sed -ie 's/# auth.backend.plain.userfile = ".*"/auth.backend.plain.userfile = \"\/config\/password_file\"/g' /etc/lighttpd/lighttpd.conf
+fi
+
+
+
+############
+# starting #
+############
+
 # start webserver
 lighttpd -f /etc/lighttpd/lighttpd.conf
 
