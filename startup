@@ -76,6 +76,10 @@ if [ -f /config/password_file ]; then
   # set the password protection directives
   sed -ie 's/# auth.backend[ ]/auth.backend /g' /etc/lighttpd/lighttpd.conf
   sed -ie 's/# auth.backend.plain.userfile = ".*"/auth.backend.plain.userfile = \"\/config\/password_file\"/g' /etc/lighttpd/lighttpd.conf
+
+  # need to set the directives stating that a specific
+  # directory requires password auth as mentioned in
+  #http://www.cyberciti.biz/tips/lighttpd-setup-a-password-protected-directory-directories.html  
 fi
 
 
